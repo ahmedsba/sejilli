@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="overflow-x-hidden w-full max-w-[100vw]">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سجّلي — المساعد البيداغوجي الذكي | Sejelli</title>
+    <meta name="description" content="سجّلي: المنصة المتكاملة لإدارة المدارس وتعزيز التعليم. أداة ذكية للأساتذة لتسيير الحضور والتقييم والمذكرات اليومية." />
+
+    <!-- Tailwind CSS v3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50:  '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        cerulean: {
+                            50:  '#ecfeff',
+                            100: '#cffafe',
+                            200: '#a5f3fc',
+                            300: '#67e8f9',
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            800: '#155e75',
+                            900: '#164e63',
+                        },
+                        'blue-grey': {
+                            50:  '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#090e17',
+                        },
+                    },
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        /* ===== BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            overflow-x: hidden;
+            background-color: #090e17;
+            color: #ffffff;
+        }
+
+        /* ===== CUSTOM SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #090e17; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #10b981, #06b6d4);
+            border-radius: 999px;
+        }
+
+        /* ===== LUXURY GLASSMORPHISM ===== */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-glass {
+            background: rgba(9, 14, 23, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== PREMIUM HERO BACKGROUND ===== */
+        .premium-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+            mask-image: radial-gradient(ellipse at top center, black 40%, transparent 90%);
+            -webkit-mask-image: radial-gradient(ellipse at top center, black 40%, transparent 90%);
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: semantic-drift 25s ease-in-out infinite alternate;
+        }
+
+        .aurora-orb-1 {
+            width: 800px;
+            height: 800px;
+            top: -10%;
+            right: 10%;
+        }
+
+        .aurora-orb-2 {
+            width: 700px;
+            height: 700px;
+            bottom: -20%;
+            left: 5%;
+            animation-delay: -12.5s;
+            animation-direction: alternate-reverse;
+        }
+
+        @keyframes semantic-drift {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(5%, 10%) scale(1.1);
+            }
+            66% {
+                transform: translate(-10%, 5%) scale(0.95);
+            }
+            100% {
+                transform: translate(0, -5%) scale(1.05);
+            }
+        }
+
+        /* ===== SCROLL REVEAL ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-fade-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-fade-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal.visible, .reveal-fade-left.visible, .reveal-fade-right.visible {
+            opacity: 1; transform: translate(0, 0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ===== FLOATING APP MOCKUP ANIMATION ===== */
+        .floating-app {
+            animation: levitate 4s ease-in-out infinite;
+        }
+        @keyframes levitate {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* ===== SUBTLE NEON GLOWS ===== */
+        .glow-emerald { box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.4); }
+        .glow-cerulean { box-shadow: 0 0 40px -10px rgba(6, 182, 212, 0.4); }
+
+        .text-gradient-animate {
+            background: linear-gradient(to right, #10b981, #06b6d4, #10b981);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 8s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* ===== FEATURE CARD ===== */
+        .feature-card {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, background 0.5s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== LUXURY APP MOCKUP STYLING ===== */
+        .app-mockup {
+            position: relative;
+            width: 100%;
+        }
+
+        .mockup-placeholder {
+            width: 100%; min-height: 300px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4rem 2rem;
+            background: linear-gradient(135deg, #1e293b, #0f172a); color: #64748b; font-size: 1.1rem; font-weight: bold;
+            border: 2px dashed rgba(255, 255, 255, 0.1); border-radius: 24px; box-sizing: border-box;
+        }
+
+        /* ===== CTA BUTTON ===== */
+        .btn-luxury {
+            position: relative;
+            background: linear-gradient(135deg, #10b981, #0891b2);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-luxury::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .btn-luxury:hover {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.6);
+            transform: scale(1.05) translateY(-2px);
+        }
+        .btn-luxury:hover::before { opacity: 1; }
+        
+        .badge-dev {
+            background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fcd34d; box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .role-text-card {
+            background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05); padding: 2.5rem; border-radius: 24px; transition: all 0.4s ease;
+        }
+        .role-text-card:hover {
+            background: rgba(255, 255, 255, 0.03); border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Original background blobs for other sections */
+        .global-blob {
+            position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.4;
+            pointer-events: none; z-index: -1; animation: blob-float 15s ease-in-out infinite alternate;
+        }
+        @keyframes blob-float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -50px) scale(1.1); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-emerald-500/30 selection:text-emerald-100 overflow-x-hidden max-w-[100vw] w-full relative">
+
+    <!-- Ambient Global Background Blobs Wrapper -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="global-blob w-full max-w-2xl aspect-square bg-emerald-600/20 top-[-10%] left-[-10%]"></div>
+        <div class="global-blob w-full max-w-3xl aspect-square bg-cerulean-600/10 top-[20%] right-[-20%]"></div>
+        <div class="global-blob w-full max-w-lg aspect-square bg-blue-600/10 bottom-[-10%] left-[20%]"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- NAVBAR                                                       -->
+    <!-- ============================================================ -->
+    <nav id="navbar" class="fixed top-0 right-0 left-0 z-50 transition-all duration-500 nav-glass w-full">
+        <div class="w-full px-4 py-4 flex justify-between items-center max-w-7xl mx-auto">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 group">
+                <img src="images/logo.png" alt="شعار سجلي" class="h-10 w-10 object-cover rounded-xl shadow-md border border-white/10">
+                <span class="text-2xl font-black text-white tracking-tight">سجّلي</span>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition-colors">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+            
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center gap-2">
+                <a href="#features" class="px-4 py-2 rounded-lg text-blue-grey-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">المزايا</a>
+                <a href="#roles" class="px-4 py-2 rounded-lg text-blue-grey-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">مساحات التطبيق</a>
+                <a href="#contact" class="px-4 py-2 rounded-lg text-blue-grey-300 hover:text-white hover:bg-white/5 transition-all text-sm font-medium">تواصل معنا</a>
+                <a href="https://github.com/ahmedsba/sejilli/releases/download/v1.0.2/app-release.apk" download="sejilli.apk" class="mr-4 px-6 py-2.5 btn-luxury text-white text-sm font-bold flex items-center gap-2">
+                    حمل التطبيق (APK)
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-grey-900/95 backdrop-blur-md border-t border-white/5">
+            <div class="flex flex-col px-4 py-4 space-y-4">
+                <a href="#features" class="text-blue-grey-300 hover:text-white font-medium">المزايا</a>
+                <a href="#roles" class="text-blue-grey-300 hover:text-white font-medium">مساحات التطبيق</a>
+                <a href="#contact" class="text-blue-grey-300 hover:text-white font-medium">تواصل معنا</a>
+                <a href="https://github.com/ahmedsba/sejilli/releases/download/v1.0.2/app-release.apk" download="sejilli.apk" class="mt-4 px-6 py-3 btn-luxury text-white text-sm font-bold flex justify-center items-center gap-2 w-full">
+                    حمل التطبيق (APK)
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- HERO SECTION (Premium Background)                            -->
+    <!-- ============================================================ -->
+    <section id="hero" class="relative w-full overflow-hidden px-4 py-12 mt-20 flex flex-col items-center text-center">
+        
+        <!-- Premium Grid Background -->
+        <div class="premium-grid"></div>
+
+        <!-- Semantic Aurora Orbs -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            <div class="aurora-orb aurora-orb-1 bg-emerald-500 blur-[130px] opacity-40"></div>
+            <div class="aurora-orb aurora-orb-2 bg-cerulean-500 blur-[130px] opacity-40"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="relative z-10 w-full max-w-3xl flex flex-col items-center">
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full glass-panel mb-8 reveal w-full sm:w-auto">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-sm font-medium text-emerald-100">التطبيق الأول للإدارة البيداغوجية والمدرسية</span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black leading-tight mb-6 reveal reveal-delay-1 tracking-tight drop-shadow-lg text-white w-full">
+                المساعد البيداغوجي <br/>
+                الذكي المتكامل
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-lg sm:text-xl md:text-2xl text-blue-grey-300 w-full max-w-3xl mb-12 leading-relaxed reveal reveal-delay-2 font-light drop-shadow">
+                أداة رقمية متطورة تعمل محلياً لضمان السرعة بدون حاجة لإنترنت دائم، مع ميزة المزامنة السحابية الآمنة لحفظ بياناتك. مصممة للارتقاء بتجربة التعليم وتسهيل المهام البيداغوجية.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal reveal-delay-3 w-full">
+                <a href="https://github.com/ahmedsba/sejilli/releases/download/v1.0.2/app-release.apk" download="https://github.com/ahmedsba/sejilli/releases/download/v1.0.2/app-release.apk" class="btn-luxury px-8 py-4 text-white text-lg font-bold w-full sm:w-auto text-center flex items-center justify-center gap-3 glow-emerald">
+                    تحميل التطبيق (APK) ⬇️
+                </a>
+                <a href="#roles" class="px-8 py-4 rounded-full border border-white/20 text-white text-lg font-bold glass-panel hover:bg-white/5 transition-all w-full sm:w-auto text-center hover:scale-105 duration-300">
+                    اكتشف المزايا
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- QUICK FEATURES (Glass Cards)                                 -->
+    <!-- ============================================================ -->
+    <section id="features" class="relative py-16 md:py-24 z-10">
+        <div class="max-w-7xl mx-auto px-4 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="feature-card glass-panel rounded-3xl p-8 reveal">
+                    <i data-lucide="book-open-check" class="w-10 h-10 text-emerald-400 mb-6"></i>
+                    <h3 class="text-xl font-bold text-white mb-3">دفتر النقاط الذكي</h3>
+                    <p class="text-blue-grey-400 text-sm leading-relaxed">تحليلات فورية ورسوم بيانية لأداء التلاميذ بنقرة واحدة.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card glass-panel rounded-3xl p-8 reveal reveal-delay-1">
+                    <i data-lucide="calendar-clock" class="w-10 h-10 text-cerulean-400 mb-6"></i>
+                    <h3 class="text-xl font-bold text-white mb-3">تسيير مرن للوقت</h3>
+                    <p class="text-blue-grey-400 text-sm leading-relaxed">جدول زمني تفاعلي مع تنبيهات ذكية للحصص القادمة.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card glass-panel rounded-3xl p-8 reveal reveal-delay-2">
+                    <i data-lucide="users" class="w-10 h-10 text-emerald-400 mb-6"></i>
+                    <h3 class="text-xl font-bold text-white mb-3">حصص تفاعلية</h3>
+                    <p class="text-blue-grey-400 text-sm leading-relaxed">إدارة دقيقة للحضور والغياب والمشاركة الصفية.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card glass-panel rounded-3xl p-8 reveal reveal-delay-3">
+                    <i data-lucide="layout-dashboard" class="w-10 h-10 text-cerulean-400 mb-6"></i>
+                    <h3 class="text-xl font-bold text-white mb-3">لوحة تحكم مركزية</h3>
+                    <p class="text-blue-grey-400 text-sm leading-relaxed">إحصائيات متكاملة وصورة واضحة للمؤسسة في الوقت الفعلي.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- ROLES & FEATURES (Zig-Zag Luxury Layout)                     -->
+    <!-- ============================================================ -->
+    <section id="roles" class="relative py-16 md:py-32 overflow-hidden">
+        
+        <div class="max-w-7xl mx-auto px-4 md:px-12">
+            
+            <!-- Section Header -->
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-3xl sm:text-5xl font-black text-white mb-6 tracking-tight">مصمم لجميع أطراف العملية التعليمية</h2>
+                <p class="text-xl text-blue-grey-400 max-w-2xl mx-auto font-light">
+                    نظام متكامل يربط بين مختلف الفاعلين في المدرسة لضمان سيرورة بيداغوجية سلسة وفعالة.
+                </p>
+            </div>
+
+            <div class="space-y-32">
+                
+                <!-- 1. Teacher (الأستاذ) -->
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                    <div class="w-full md:w-1/2 order-first md:order-1 reveal-fade-left">
+                        <div class="floating-app">
+                            <div class="app-mockup rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(16,185,129,0.3)]">
+                                <img src="./images/teacher-app.png" class="w-full max-w-sm mx-auto h-auto object-contain" alt="تطبيق الأستاذ" onerror="this.outerHTML='<div class=\'mockup-placeholder\'><div class=\'flex flex-col items-center gap-2\'><i data-lucide=\'image\' class=\'w-8 h-8 opacity-50\'></i><span>صورة تطبيق الأستاذ<br>(images/teacher-app.png)</span></div></div>'" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 order-2 md:order-2 reveal-fade-right">
+                        <div class="role-text-card text-center md:text-right flex flex-col items-center md:items-start">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 mb-6 border border-emerald-500/20">
+                                <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-4">الأستاذ</h3>
+                            <p class="text-lg text-blue-grey-300 leading-relaxed mb-6">
+                                التحكم الكامل في الأقسام بين يديك. دفتر تنقيط ذكي، إعداد الدفتر اليومي ومزامنته، وتتبع دقيق لمشاركة التلاميذ. تخلص من الأعمال الورقية وركز على ما يهم: التعليم.
+                            </p>
+                            <ul class="space-y-3 text-blue-grey-200">
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> إدارة سهلة للأقسام والمجموعات</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> دفتر نقاط متزامن وآلي الحساب</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> إعداد الدفتر اليومي ومزامنته مع المفتش</li>
+                            </ul>
+                            <!-- <a href="teacher.html" class="inline-flex items-center gap-2 mt-6 px-6 py-3 btn-luxury text-white text-sm font-bold glow-emerald">
+                                اكتشف مساحة الأستاذ
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                            </a> -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Inspector (المفتش) - Reversed -->
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                    <div class="w-full md:w-1/2 order-2 md:order-1 reveal-fade-right">
+                        <div class="role-text-card text-center md:text-right flex flex-col items-center md:items-start">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cerulean-500/10 text-cerulean-400 mb-6 border border-cerulean-500/20">
+                                <i data-lucide="search-check" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-4">المفتش</h3>
+                            <p class="text-lg text-blue-grey-300 leading-relaxed mb-6">
+                                إشراف بيداغوجي دقيق وفعال. متابعة الأساتذة بيداغوجياً، الاطلاع على الدفتر اليومي عن بعد، واستخراج إحصائيات تقييمية تساعد في توجيه العملية التربوية.
+                            </p>
+                            <ul class="space-y-3 text-blue-grey-200">
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-cerulean-400"></i> متابعة الأستاذ بيداغوجياً والاطلاع على دفتره اليومي</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-cerulean-400"></i> تقارير الزيارات التفتيشية المرقمنة</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-cerulean-400"></i> إحصائيات عامة حول تقدم البرامج</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 order-first md:order-2 reveal-fade-left">
+                        <div class="floating-app" style="animation-delay: -1s;">
+                            <div class="app-mockup rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(6,182,212,0.3)]">
+                                <img src="./images/inspector-app.png" class="w-full max-w-sm mx-auto h-auto object-contain" alt="تطبيق المفتش" onerror="this.outerHTML='<div class=\'mockup-placeholder\'><div class=\'flex flex-col items-center gap-2\'><i data-lucide=\'image\' class=\'w-8 h-8 opacity-50\'></i><span>صورة تطبيق المفتش<br>(images/inspector-app.png)</span></div></div>'" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Administration (الإدارة) -->
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                    <div class="w-full md:w-1/2 order-first md:order-1 reveal-fade-left">
+                        <div class="floating-app" style="animation-delay: -2s;">
+                            <div class="app-mockup rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(16,185,129,0.3)]">
+                                <img src="./images/admin-app.png" class="w-full max-w-sm mx-auto h-auto object-contain" alt="تطبيق الإدارة" onerror="this.outerHTML='<div class=\'mockup-placeholder\'><div class=\'flex flex-col items-center gap-2\'><i data-lucide=\'image\' class=\'w-8 h-8 opacity-50\'></i><span>صورة تطبيق الإدارة<br>(images/admin-app.png)</span></div></div>'" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 order-2 md:order-2 reveal-fade-right">
+                        <div class="role-text-card text-center md:text-right flex flex-col items-center md:items-start">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 mb-6 border border-emerald-500/20">
+                                <i data-lucide="building-2" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-3xl font-bold text-white mb-4">الإدارة</h3>
+                            <p class="text-lg text-blue-grey-300 leading-relaxed mb-6">
+                                نظرة شاملة على نبض المؤسسة. إدارة ملفات الأساتذة والتلاميذ، مراقبة الغيابات بشكل فوري، واستخراج الكشوف والشهادات المدرسية بضغطة زر.
+                            </p>
+                            <ul class="space-y-3 text-blue-grey-200">
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> رقمنة سجلات الغياب والحضور</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> توليد التقارير والإحصائيات الإدارية</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i> إدارة الجدول الزمني للمؤسسة</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Parents (ولي الأمر) - Temporarily disabled due to missing assets
+                <div class="flex flex-col md:flex-row items-center gap-12 md:gap-20">
+                    <div class="w-full md:w-1/2 order-2 md:order-1 reveal-fade-right">
+                        <div class="role-text-card text-center md:text-right flex flex-col items-center md:items-start">
+                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 mb-6 border border-amber-500/20">
+                                <i data-lucide="heart-handshake" class="w-6 h-6"></i>
+                            </div>
+                            <div class="flex items-center justify-center md:justify-start gap-4 mb-4 w-full">
+                                <h3 class="text-3xl font-bold text-white">ولي الأمر</h3>
+                                <span class="badge-dev text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                                    <i data-lucide="hammer" class="w-3 h-3"></i> قيد التطوير
+                                </span>
+                            </div>
+                            <p class="text-lg text-blue-grey-300 leading-relaxed mb-6">
+                                تواصل مباشر ومستمر مع المدرسة. يمكن للأولياء تتبع نتائج أبنائهم، مراقبة حضورهم، والاطلاع على ملاحظات الأساتذة لضمان مواكبة مسارهم الدراسي.
+                            </p>
+                            <ul class="space-y-3 text-blue-grey-200 opacity-70">
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="clock" class="w-5 h-5 text-amber-400"></i> إشعارات فورية بالنتائج والتقييمات</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="clock" class="w-5 h-5 text-amber-400"></i> تتبع الغيابات والمواظبة</li>
+                                <li class="flex items-center justify-center md:justify-start gap-3"><i data-lucide="clock" class="w-5 h-5 text-amber-400"></i> قناة تواصل آمنة مع الطاقم التربوي</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 order-first md:order-2 reveal-fade-left">
+                        <div class="floating-app" style="animation-delay: -3s;">
+                            <div class="app-mockup rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(245,158,11,0.3)] opacity-70" style="filter: grayscale(40%);">
+                                <img src="./images/parent-app.png" class="w-full max-w-sm mx-auto h-auto object-contain" alt="تطبيق ولي الأمر" onerror="this.outerHTML='<div class=\'mockup-placeholder\'><div class=\'flex flex-col items-center gap-2\'><i data-lucide=\'image\' class=\'w-8 h-8 opacity-50\'></i><span>صورة تطبيق الولي<br>(images/parent-app.png)</span></div></div>'" />
+                                <div class="absolute inset-0 bg-blue-grey-900/60 backdrop-blur-sm flex items-center justify-center flex-col">
+                                    <i data-lucide="construction" class="w-12 h-12 text-amber-400 mb-3 animate-pulse"></i>
+                                    <span class="text-amber-400 font-bold text-lg">قريباً...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- CTA SECTION                                                  -->
+    <!-- ============================================================ -->
+    <section id="contact" class="relative py-24 md:py-32 overflow-hidden border-t border-white/5 bg-blue-grey-900/50">
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #ffffff 1px, transparent 1px); background-size: 40px 40px;"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-6 reveal tracking-tight">
+                ابقَ على اطلاع دائم
+            </h2>
+            <p class="text-lg text-blue-grey-300 max-w-2xl mx-auto mb-10 leading-relaxed reveal reveal-delay-1 font-light">
+                انضم إلى قائمتنا البريدية لتصلك أحدث الميزات، التحديثات، والشروحات الخاصة بمنصة سجلي.
+            </p>
+            <form id="newsletter-form" name="newsletter" method="POST" data-netlify="true" class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal reveal-delay-2 max-w-lg mx-auto">
+                <input type="hidden" name="form-name" value="newsletter" />
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="أدخل بريدك الإلكتروني"
+                    class="w-full px-6 py-4 rounded-full glass-panel text-white placeholder-blue-grey-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all text-right"
+                />
+                <button type="submit" class="btn-luxury px-10 py-4 w-full sm:w-auto text-white font-bold whitespace-nowrap glow-emerald">
+                    سجّل مجاناً
+                </button>
+            </form>
+            <div id="success-message" style="display: none;" class="text-green-400 font-bold mt-4 text-center">
+                شكراً لانضمامك إلينا! سنبقيك على اطلاع بكل جديد بخصوص منصة سجلي.
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FOOTER                                                       -->
+    <!-- ============================================================ -->
+    <footer class="relative bg-[#05080f] border-t border-white/5 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <a href="#" class="flex items-center gap-3 mb-4 group">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cerulean-500 flex items-center justify-center">
+                            <i data-lucide="layout-dashboard" class="w-4 h-4 text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white">سجّلي</span>
+                    </a>
+                    <p class="text-blue-grey-400 text-sm leading-relaxed max-w-xs font-light">
+                        التطبيق الأول للإدارة البيداغوجية والمدرسية. الجيل الجديد من التكنولوجيا التعليمية.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">روابط هامة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-blue-grey-400 hover:text-emerald-400 transition-colors text-sm">المزايا</a></li>
+                        <li><a href="#roles" class="text-blue-grey-400 hover:text-emerald-400 transition-colors text-sm">مساحات التطبيق</a></li>
+                        <li><a href="#contact" class="text-white/35 hover:text-emerald-400 transition-colors text-sm">تواصل معنا</a></li>
+                        <li><a href="privacy.html" class="text-blue-grey-400 hover:text-emerald-400 transition-colors text-sm">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">للتواصل</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-center gap-3 text-blue-grey-400 text-sm">
+                            <i data-lucide="mail" class="w-4 h-4 text-emerald-400"></i> contact@sejelli.online
+                        </li>
+                        <li class="flex items-center gap-3 text-blue-grey-400 text-sm">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i> <span dir="ltr" class="inline-block text-right">+213 776 32 11 61</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-8 border-t border-gray-700/50 pt-6">
+                <p class="text-base font-medium text-gray-200 mb-2">صُمم وطُوّر من طرف الأستاذ : أحمد سبع</p>
+                <p class="text-sm text-gray-400">© 2026 SBA Labs. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT                                                   -->
+    <!-- ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close menu when clicking a link
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+        }
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.style.background = 'rgba(9, 14, 23, 0.85)';
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(9, 14, 23, 0.6)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        const revealElements = document.querySelectorAll('.reveal, .reveal-fade-left, .reveal-fade-right');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+
+    <script>
+        document.getElementById("newsletter-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const myForm = event.target;
+            const formData = new FormData(myForm);
+
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString(),
+            })
+            .then(() => {
+                document.getElementById("newsletter-form").style.display = "none";
+                document.getElementById("success-message").style.display = "block";
+            })
+            .catch((error) => console.error(error));
+        });
+    </script>
+</body>
+</html>
